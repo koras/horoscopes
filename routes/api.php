@@ -12,6 +12,7 @@ Route::prefix('products')->group(function () {
 
     Route::prefix('excel')->group(function () {
         // определение загружаемых товаров excel
+        Route::post('upload', [ App\Http\Controllers\Admin\ProductsController::class, "uploadExcel"]);
         Route::post('preparation', [ App\Http\Controllers\Admin\ProductsController::class, "preparationExcel"]);
         //
         Route::post('save', function () {

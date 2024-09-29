@@ -20,14 +20,24 @@ class ProductsController extends Controller
      */
     public function preparationExcel(ProductsExcelRequest $request)
     {
+        $service = new ProductsPrepare();
+        Excel::import($service, $request->file('file'));
+
+        return $service->firstFiveRows;
+    }
+
+    public function uploadExcel(ProductsExcelRequest $request)
+    {
+        $file = $request->file('file');
 
         $firstRow = Excel::import(new ProductsPrepare, $request->file('file'));
-     //   $model =
+        //   $model =
 
-  //      Excel::import(new ProductsPrepare, $file);
-      // $data = (new UploadExcel())->parserExcel($request->file('file'));
-         dd($firstRow );
+        //      Excel::import(new ProductsPrepare, $file);
+        // $data = (new UploadExcel())->parserExcel($request->file('file'));
+        dd($firstRow);
     }
+
 
     /**
      * Сохраняем эксель
