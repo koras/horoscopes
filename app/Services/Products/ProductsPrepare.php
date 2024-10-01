@@ -11,7 +11,6 @@ class ProductsPrepare implements ToCollection
 {
     private $titleName = [
         0 => "Выберите категорию",
-        18 => "Id",
         1 => "Название",
         2 => "Количество",
         3 => "Название",
@@ -29,6 +28,7 @@ class ProductsPrepare implements ToCollection
         15 => "ВЕС",
         16 => "ЦВЕТ",
         17 => "Поставщик",
+        18 => "Id",
     ];
 
     private function getCategoties()

@@ -5,42 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class ProductFileShops extends Model
 {
-
+    /**
+     * Таблица в которой хранятся ссылки на файл загруженный магазином
+     */
     use HasFactory;
 
     // Указываем имя таблицы
-    protected $table = 'products';
+    protected $table = 'products_file_shops';
 
     // Поля, которые могут быть заполнены
-    protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'quantity',
-        'discount',
-        'color',
-        'size',
-        'weight',
-        'seller_id',
-        'supplier_id',
-    ];
-    // Связь с моделью Seller
-    public function seller()
-    {
-        return $this->belongsTo(Seller::class);
-    }
+    protected $fillable = ['name', 'path', 'hash_name', 'shop_id'];
 
-    // Связь с моделью supplier
-    public function supplier()
+    public function getFile(int $id)
     {
-        return $this->belongsTo(supplier::class);
-    }
-
-    // Связь с моделью ProductAttributes (один к одному)
-    public function attributes()
-    {
-        return $this->hasOne(ProductAttribute::class, 'product_id');
+       return ProductFileShops::find($id);
     }
 }
