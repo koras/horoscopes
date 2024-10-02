@@ -3,12 +3,21 @@
 namespace App\Services\Products;
 
 use App\Models\Product;
+use App\Services\Products\ProductsFields;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Illuminate\Support\Collection;
 
+
 class ProductsPrepare implements ToCollection
 {
+    private $productsFields;
+
+    public function __construct()
+    {
+        $this->productsFields = new ProductsFields();
+    }
+
     private $titleName = [
         0 => "Выберите категорию",
         1 => "Название",
@@ -36,9 +45,10 @@ class ProductsPrepare implements ToCollection
         return $this->titleName;
     }
 
-    private function getTitle($num)
+    private function getTitle($id)
     {
-        return $this->titleName[$num] ?? "";
+        $data = $this->productsFields->getFieldName($id);
+        return ["id"=> $data["id"],"name"=> $data["name"]];
     }
 
     public $firstFiveRows = [];
@@ -52,7 +62,7 @@ class ProductsPrepare implements ToCollection
         $result["default"] = $this->getSelect();
         $result["items"] = $this->getItems();
         $result["categories"] = $this->getCategoties();
-//        dd( $this->firstFiveRows);
+
         $this->firstFiveRows = $result;
     }
 
@@ -78,25 +88,24 @@ class ProductsPrepare implements ToCollection
         // Останавливаем импорт, если обработано больше 5 строк
         $collums = [];
         foreach ($this->firstFiveRows[0] as $key) {
-            $collums[] = ["id" => 0, "name" => $this->getTitle(0)];
+            $collums[] = $this->getTitle(1);
         }
         foreach ($this->firstFiveRows as $key => $rows) {
             foreach ($rows as $collum => $item) {
                 if ($this->getCost($item)) {
-                    $collums[$collum] = ["id" => 3, "name" => $this->getTitle(3)];// "Количество"
+                    $collums[$collum] = $this->getTitle(4);// "Количество"
                 }
                 if ($this->getQuantity($item)) {
-                    $collums[$collum] = ["id" => 2, "name" => $this->getTitle(2)]; // ID
+                    $collums[$collum] = $this->getTitle(3); // ID
                 }
                 if ($this->getID($item)) {
-                    $collums[$collum] = ["id" => 18, "name" => $this->getTitle(18)]; // ID
+                    $collums[$collum] = $this->getTitle(19); // ID
                 }
                 if ($this->getName($item)) {
-                    $collums[$collum] = ["id" => 1, "name" => $this->getTitle(1)]; //"Название";
+                    $collums[$collum] = $this->getTitle(2); //"Название";
                 }
             }
         }
-
         return $collums;
     }
 
