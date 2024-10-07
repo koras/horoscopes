@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Contracts\Services;
+namespace App\Services\Contracts;
 
-use App\Contracts\Models\UserInterface;
+
 
 interface SmsServiceInterface
 {

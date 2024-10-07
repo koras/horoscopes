@@ -2,7 +2,9 @@
 
 namespace App\Enums;
 
-class SmsRequestStatus
+enum SmsRequestStatus: string
 {
-
+    case New = 'new';
+    case Confirmed = 'confirmed';
+    case Invalid = 'invalid';
 }

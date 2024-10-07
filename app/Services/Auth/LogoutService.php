@@ -2,7 +2,9 @@
 
 namespace App\Services\Auth;
 
-class LogoutService
+use App\Services\Auth\Contracts\LogoutServiceInterface;
+
+class LogoutService implements LogoutServiceInterface
 {
 
 }

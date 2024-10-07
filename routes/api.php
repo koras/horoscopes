@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return  ;
@@ -19,4 +21,16 @@ Route::prefix('products')->group(function () {
             return  ;
         });
     });
+});
+
+
+
+Route::post('/auth/register', [AuthController::class, 'register1Step']);
+Route::post('/auth/register_confirm', [AuthController::class, 'register2Confirm']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });

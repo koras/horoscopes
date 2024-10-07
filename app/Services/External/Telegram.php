@@ -2,9 +2,9 @@
 
 namespace App\Services\External;
 
-class Sms
+class Telegram
 {
-    public function send($phone, $messages)
+    public function send($messages)
     {
     // кролик
 

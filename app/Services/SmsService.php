@@ -2,15 +2,13 @@
 
 namespace App\Services;
 
-use App\Contracts\Services\EmailServiceInterface;
-use App\Contracts\Services\TelegramServiceInterface;
+use App\Services\Contracts\TelegramServiceInterface;
 use Illuminate\Support\Str;
 use App\Dto\SmsRequestCreateDto;
 use App\Enums\SmsRequestType;
-use App\Contracts\Services\SmsServiceInterface;
-use App\Contracts\Services\SmsRequestServiceInterface;
-use App\Contracts\Models\SmsRequestInterface;
-use App\Contracts\Models\UserInterface;
+use App\Services\Contracts\SmsServiceInterface;
+use App\Services\Contracts\SmsRequestServiceInterface;
+use App\Models\Contracts\SmsRequestInterface;
 use Illuminate\Support\Facades\Storage;
 
 class SmsService implements SmsServiceInterface
