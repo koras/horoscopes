@@ -35,7 +35,7 @@ class LoginController extends Controller
             return response()->json(['errors' => $e->errors()], 422);
         }
 
-        $result = $loginService->login($request->phone, $request->password);
+        $result = $loginService->login($request->email, $request->password);
         return response()->json($result);
     }
 

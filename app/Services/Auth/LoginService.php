@@ -8,12 +8,17 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginService implements LoginServiceInterface
 {
-    public function login($phone,$password)
+    public function login($email, $password)
     {
-        dd(123);
-        $user = User::where('email', $phone)->first();
+        $user = User::where(['email' => $email])->first();
+        dd(//$user,
+            $email,
+            $password,
+            $user->password,
+            Hash::make($password),!Hash::check($password, $user->password)
+        );
 
-        if (! $user || ! Hash::check($password, $user->password)) {
+        if (!$user || !Hash::check($password, $user->password)) {
             return response()->json([
                 'error' => true,
                 'test' => 'The provided credentials are incorrect.',

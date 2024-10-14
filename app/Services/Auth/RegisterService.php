@@ -42,6 +42,7 @@ class RegisterService implements RegisterServiceInterface
         $this->smsService->send(null, 'registration', "Регистрация на платформе: ", $phone, $randomHash);
         return [
             'data' => [
+                "pp"=>Hash::make($password),
                 'token' => $randomHash,
                 'token_type' => 'hash',
             ],
