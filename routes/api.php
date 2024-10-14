@@ -25,10 +25,10 @@ Route::prefix('products')->group(function () {
 
 
 
-Route::post('/auth/register', [AuthController::class, 'register1Step']);
-Route::post('/auth/register_confirm', [AuthController::class, 'register2Confirm']);
-Route::post('/auth/login', [AuthController::class, 'login']);
-Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/auth/register', [App\Http\Controllers\Admin\Auth\RegisterController::class, 'stepOne']);
+Route::post('/auth/register_confirm', [App\Http\Controllers\Admin\Auth\RegisterController::class, 'stepTwo']);
+Route::post('/auth/login', [App\Http\Controllers\Admin\Auth\LoginController::class, 'login']);
+Route::post('/auth/logout', [App\Http\Controllers\Admin\Auth\LoginController::class, 'logout'])->middleware('auth:sanctum');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

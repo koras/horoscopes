@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Auth;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -10,38 +10,14 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Services\Auth\Contracts\RegisterServiceInterface;
 use App\Models\User;
+use App\Http\Controllers\Controller;
 
 use App\Services\Auth\Contracts\LoginServiceInterface;
 
 
-class RegisterController extends Controller
+class LoginController extends Controller
 {
-    // создавать работу на много лучше, чем искать работу
 
-    public function register1Step(Request $request, RegisterServiceInterface $registerService)
-    {
-        try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|string|email|max:255|unique:users',
-                'phone' => 'required|string|unique:users',
-                //    'password' => 'required|string|min:8|confirmed',
-                 'password' => 'required|string|min:8',
-            ]);
-        } catch (ValidationException $e) {
-            Log::error('Validation Error', $e->errors());
-            return response()->json(['errors' => $e->errors()], 422);
-        }
-        $result = $registerService->register($request->name, $request->phone, $request->email, $request->password);
-        return response()->json($result);
-    }
-
-
-
-    public function register2Confirm(Request $request, RegisterServiceInterface $registerService)
-    {
-
-    }
 
 
 

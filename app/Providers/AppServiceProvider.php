@@ -12,10 +12,13 @@ use App\Services\Auth\Contracts\RegisterServiceInterface;
 
 use App\Services\Auth\LoginService;
 use App\Services\Auth\Contracts\LoginServiceInterface;
+use App\Services\SmsService;
+use App\Services\External\Telegram;
 
 use App\Services\Auth\LogoutService;
 use App\Services\Auth\Contracts\LogoutServiceInterface;
-
+use App\Services\Contracts\SmsServiceInterface;
+use App\Services\Contracts\TelegramServiceInterface;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RegisterServiceInterface::class, RegisterService::class);
         $this->app->bind(LoginServiceInterface::class, LoginService::class);
         $this->app->bind(LogoutServiceInterface::class, LogoutService::class);
+        $this->app->bind(SmsServiceInterface::class, SmsService::class);
+        $this->app->bind(TelegramServiceInterface::class, Telegram::class);
     }
 
     /**

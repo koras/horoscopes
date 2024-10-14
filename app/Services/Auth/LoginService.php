@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginService implements LoginServiceInterface
 {
-
     public function login($phone,$password)
     {
+        dd(123);
         $user = User::where('email', $phone)->first();
 
         if (! $user || ! Hash::check($password, $user->password)) {

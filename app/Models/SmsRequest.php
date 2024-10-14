@@ -12,7 +12,7 @@ class SmsRequest extends Model implements SmsRequestInterface
 {
 
     use HasFactory;
-
+    protected $primaryKey = 'sms_requests_id';
     protected $casts = [
         'confirmed_date' => 'datetime:Y-m-d H:i:s',
         'expired_date' => 'datetime:Y-m-d H:i:s',
@@ -28,6 +28,7 @@ class SmsRequest extends Model implements SmsRequestInterface
         'status',
         'confirmed_date',
         'expired_date',
+        'confirmed_hash',
         'message',
         'external_id',
         'sent_status',
@@ -46,7 +47,7 @@ class SmsRequest extends Model implements SmsRequestInterface
      * @param string $type
      * @return SmsRequest|null
      */
-    public function getCode(string $code, int $userId,  string $type): ?SmsRequest
+    public function getCode(string $code, $userId,  string $type): ?SmsRequest
     {
         return  SmsRequest::where('user_id', $userId)->with('user')
             ->where('created_at', '>=', now()->subMinutes(5)->toDateTimeString())
@@ -56,6 +57,26 @@ class SmsRequest extends Model implements SmsRequestInterface
             ->orderBy('id', 'desc')
             ->first();
     }
+    /**
+     * @param string $code
+     * @param int $userId
+     * @param string $type
+     * @return SmsRequest|null
+     */
+    public function getCodeHash(string $code, $hash): ?SmsRequest
+    {
+        $result =   SmsRequest::where('confirmed_hash', $hash)
+            ->where('created_at', '>=', now()->subMinutes(55)->toDateTimeString())
+            ->where('status', SmsRequestStatus::New->value)
+          //  ->where('code', $code)
+            ->orderBy('sms_requests_id', 'desc')
+            ->first();
+        if( $result){
+      //    $this->setConfirmed($result);
+        }
+        return $result;
+
+    }
 
     /**
      * @param SmsRequest $smsRequest
@@ -64,7 +85,7 @@ class SmsRequest extends Model implements SmsRequestInterface
     public function setConfirmed(SmsRequest $smsRequest): void
     {
         $smsRequest->status = SmsRequestStatus::Confirmed->value;
-        $smsRequest->confirmedDate = now();
+       // $smsRequest->confirmedDate = now();
         $smsRequest->save();
     }
     /**
@@ -75,6 +96,7 @@ class SmsRequest extends Model implements SmsRequestInterface
      */
     public function saveSms(SmsRequestCreateDto $smsDto): SmsRequest
     {
+
         return SmsRequest::create([
             'code' => $smsDto->code,
             'user_id' => $smsDto->userId,
@@ -88,10 +110,10 @@ class SmsRequest extends Model implements SmsRequestInterface
     }
     /**
      * @param string $type
-     * @param int $userId
+     * @param  $userId
      * @return void
      */
-    public function blockedOldRequests(string $type, int $userId): void
+    public function blockedOldRequests(string $type, $userId): void
     {
         SmsRequest::where(
             [

@@ -40,22 +40,24 @@ class SmsService implements SmsServiceInterface
      * @param string $type
      * @return void
      */
-    public function send($user, string $type, string $message, ?string $phone = null): array
+    public function send($user, string $type, string $message, ?string $phone = null, $randomHash = null): array
     {
-        $hash = static::getHash();
+        if(is_null($randomHash)){
+            $randomHash = static::getHash();
+        }
+
         $code = $this->generateCode(4);
         $message = $this->getMessage($type, $code, $message);
-        $this->smsRequest->blockedOldRequests($type, $user->id);
-        $phone = $phone ?? $user->phone;
+        $phone = $phone ?? $user->phone??"";
 
 
         $this->smsRequest->saveSms(
             new SmsRequestCreateDto(
                 code: $code,
-                userId: $user->id,
+                userId: $user->id??0,
                 phone: $phone,
                 message: $message,
-                confirmedHash: $hash,
+                confirmedHash: $randomHash,
                 type: $type,
                 expiredTime: self::TYPE_NOTIFICATION[$type]
             )
@@ -65,7 +67,7 @@ class SmsService implements SmsServiceInterface
         return [
             'externalId' => $externalId,
             'expiredTime' => self::TYPE_NOTIFICATION[$type],
-            'confirmed_hash' => $hash
+            'confirmed_hash' => $randomHash
         ];
     }
 
@@ -167,6 +169,15 @@ class SmsService implements SmsServiceInterface
         return $message;
     }
 
+
+
+    /**
+     * @return bool
+     */
+    public function getCodeHash(string $code, $hash)
+    {
+        return $this->smsRequest->getCodeHash($code, $hash);
+    }
     /**
      * @param $user
      * @param $type
