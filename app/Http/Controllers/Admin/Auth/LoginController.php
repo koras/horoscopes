@@ -14,7 +14,7 @@ use App\Models\User;
 use App\Services\Auth\Contracts\LoginServiceInterface;
 
 
-class AuthController extends Controller
+class RegisterController extends Controller
 {
     // создавать работу на много лучше, чем искать работу
 
