@@ -25,10 +25,16 @@ class ProductsController extends Controller
      */
     public function preparationExcel(ProductsExcelRequest $request)
     {
+        // "application/vnd.ms-excel"
         $service = new ProductsPrepare();
-        Excel::import($service, $request->file('file'));
         $file = $request->file('file');
+
+        Excel::import($service, $file);
+
+
+
         $hashedName = $file->hashName();
+
         $path = $file->storeAs('uploads', $hashedName, 'public');
         // Сохраняем информацию о файле в базу данных
         $fileRecord = new ProductFileShops();

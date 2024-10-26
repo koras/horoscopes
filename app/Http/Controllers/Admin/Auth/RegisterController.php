@@ -43,7 +43,6 @@ class RegisterController extends Controller
 
     public function stepTwo(Request $request, RegisterServiceInterface $registerService)
     {
-
         $result = $registerService->register($request->token, $request->code);
         return response()->json($result);
     }

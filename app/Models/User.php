@@ -57,7 +57,7 @@ class User extends Authenticatable
             'name' => $name,
             'phone' => $phone,
             'email' => $email,
-            'password' => Hash::make($password),
+            'password' => $password,
             'status' => $status,
         ]);
     }

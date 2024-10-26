@@ -42,7 +42,7 @@ class RegisterService implements RegisterServiceInterface
         $this->smsService->send(null, 'registration', "Регистрация на платформе: ", $phone, $randomHash);
         return [
             'data' => [
-                "pp"=>Hash::make($password),
+            //    "pp"=>Hash::make($password),
                 'token' => $randomHash,
                 'token_type' => 'hash',
             ],
@@ -59,7 +59,7 @@ class RegisterService implements RegisterServiceInterface
 
         if( $confirm && $userInfo){
            $info = unserialize($userInfo->text);
-        //   dd($info);
+          // dd($info);
             $user = $this->user->createUser($info['name'],$info['phone'],$info['email'],$info['password'], 1);
            // dd($user );
             $token = $user->createToken('auth_token')->plainTextToken;

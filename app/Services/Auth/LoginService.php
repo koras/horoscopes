@@ -11,12 +11,6 @@ class LoginService implements LoginServiceInterface
     public function login($email, $password)
     {
         $user = User::where(['email' => $email])->first();
-        dd(//$user,
-            $email,
-            $password,
-            $user->password,
-            Hash::make($password),!Hash::check($password, $user->password)
-        );
 
         if (!$user || !Hash::check($password, $user->password)) {
             return response()->json([
