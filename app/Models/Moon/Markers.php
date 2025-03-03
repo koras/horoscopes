@@ -1,44 +1,36 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Moon;
 
+use App\Models\Moon\MarkersTest;
+use App\Contracts\Models\Moon\MarkersInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Contracts\Nodels\ProductInterface;
 
-class Product extends Model implements ProductInterface
+class Markers extends Model implements MarkersInterface
 {
 
     use HasFactory;
 
-    protected $primaryKey = 'product_id';
+    protected $primaryKey = 'id';
+
     public $incrementing = true;
 
     // Указываем имя таблицы
-    protected $table = 'products';
+    protected $table = 'markers';
 
     // Поля, которые могут быть заполнены
     protected $fillable = [
-        'name',
-        'price',
-        'quantity',
-        'shop_id',
+        'abbreviations',
+        'name_ru',
+        'name_lat',
+        'description',
     ];
-    // Связь с моделью Seller
-    public function seller()
+
+
+    public function markerTests()
     {
-        return $this->belongsTo(Seller::class);
+        return $this->hasMany(MarkersTest::class, 'marker_id', 'id');
     }
 
-    // Связь с моделью supplier
-    public function supplier()
-    {
-        return $this->belongsTo(supplier::class);
-    }
-
-    // Связь с моделью ProductAttributes (один к одному)
-    public function attributes()
-    {
-        return $this->hasOne(ProductAttributes::class, 'product_id');
-    }
 }

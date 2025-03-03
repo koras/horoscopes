@@ -47,8 +47,16 @@ class ProductsPrepare implements ToCollection
 
     private function getTitle($id)
     {
+        $result = [];
         $data = $this->productsFields->getFieldName($id);
-        return ["id"=> $data["id"],"name"=> $data["name"]];
+        if(isset($data["id"])){
+            $result["id"] = $data["id"];
+        }
+        if(isset($data["name"])){
+            $result["name"] = $data["name"];
+        }
+
+        return $result;
     }
 
     public $firstFiveRows = [];

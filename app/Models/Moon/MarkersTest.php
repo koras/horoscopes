@@ -2,11 +2,12 @@
 
 namespace App\Models\Moon;
 
-use App\Contracts\Models\Moon\MarkersInterface;
+use App\Contracts\Models\Moon\MarkersTestInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Moon\Markers;
 
-class Markers extends Model implements MarkersInterface
+class MarkersTest extends Model implements MarkersTestInterface
 {
 
     use HasFactory;
@@ -16,14 +17,15 @@ class Markers extends Model implements MarkersInterface
     public $incrementing = true;
 
     // Указываем имя таблицы
-    protected $table = 'markers';
+    protected $table = 'markers_tests';
 
     // Поля, которые могут быть заполнены
     protected $fillable = [
-        'abbreviations',
-        'name_ru',
-        'name_lat',
-        'description',
+        'marker_id',
+        'tests_id',
     ];
-
+    public function marker()
+    {
+        return $this->belongsTo(Markers::class, 'marker_id', 'id');
+    }
 }

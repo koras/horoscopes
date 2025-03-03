@@ -2,7 +2,10 @@
 
 namespace App\Repositories;
 
-class MarkersRepository
+use App\Contracts\Repositories\MarkersRepositoryInterface;
+
+class MarkersRepository  extends BaseRepository implements MarkersRepositoryInterface
 {
 
 }
+

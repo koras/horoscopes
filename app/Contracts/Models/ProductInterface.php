@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Nodels;
+namespace App\Contracts\Models;
 
 interface ProductInterface
 {

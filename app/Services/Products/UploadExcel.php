@@ -6,13 +6,19 @@ use App\Models\ProductFileShops;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Services\Products\ProductsFields;
+use App\Contracts\Models\ProductInterface;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductAttributes;
 
 class UploadExcel
 {
-    public function __construct(public ProductFileShops $fileShops, private ProductsFields $productsFields)
+    public function __construct(
+        private ProductFileShops $fileShops,
+        private ProductsFields $productsFields,
+        private ProductInterface $product
+
+    )
     {
     }
 
@@ -20,12 +26,12 @@ class UploadExcel
     {
         $uploadId = $request->input("upload_id");
         $columns = $request->input("col");
+
         $fileRecord = $this->fileShops->getFile($uploadId);
         if ($fileRecord) {
             $filePath = $fileRecord->path;
             $data = $this->getData($filePath);
             // Вернем данные
-
             $this->prepareProduct($columns, $data);
             return $data;
         }

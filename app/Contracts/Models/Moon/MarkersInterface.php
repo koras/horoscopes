@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Model\Moon;
+namespace App\Contracts\Models\Moon;
 
 interface MarkersInterface
 {

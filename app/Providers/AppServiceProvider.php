@@ -19,6 +19,13 @@ use App\Services\Auth\LogoutService;
 use App\Services\Auth\Contracts\LogoutServiceInterface;
 use App\Services\Contracts\SmsServiceInterface;
 use App\Services\Contracts\TelegramServiceInterface;
+use App\Contracts\Services\HoroscopeServiceInterface;
+use App\Services\Moon\MarkerService;
+use App\Services\HoroscopeService;
+
+
+
+use App\Contracts\Services\MarkerServiceInterface;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -29,11 +36,14 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
 
+        $this->app->bind(HoroscopeServiceInterface::class, HoroscopeService::class);
+
         $this->app->bind(RegisterServiceInterface::class, RegisterService::class);
         $this->app->bind(LoginServiceInterface::class, LoginService::class);
         $this->app->bind(LogoutServiceInterface::class, LogoutService::class);
         $this->app->bind(SmsServiceInterface::class, SmsService::class);
         $this->app->bind(TelegramServiceInterface::class, Telegram::class);
+        $this->app->bind(MarkerServiceInterface::class, MarkerService::class);
     }
 
     /**
