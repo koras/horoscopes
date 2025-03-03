@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horoscopes List</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Подключите jQuery -->
 </head>
 <body>
 <div class="container mt-5">
@@ -30,7 +31,10 @@
                 <td>{{ $horoscope->text_ru }}</td>
                 <td>{{ $horoscope->text_en }}</td>
                 <td>{{ $horoscope->using }}</td>
-                <td>{{ $horoscope->active ? 'Yes' : 'No' }}</td>
+                <td>
+                    <input type="checkbox" class="active-toggle" data-id="{{ $horoscope->id }}" {{ $horoscope->active ? 'checked' : '' }}>
+                    <span class="active-status">{{ $horoscope->active ? 'Yes' : 'No' }}</span>
+                </td>
                 <td>{{ $horoscope->created_at }}</td>
                 <td>{{ $horoscope->updated_at }}</td>
                 <td>
@@ -49,5 +53,37 @@
     <!-- Пагинация -->
     {{ $horoscopes->links() }}
 </div>
+
+<script>
+    $(document).ready(function () {
+        // Обработка изменения состояния чекбокса
+        $('.active-toggle').on('change', function () {
+            const checkbox = $(this);
+            const horoscopeId = checkbox.data('id');
+            const isActive = checkbox.is(':checked');
+
+            // Отправка AJAX-запроса
+            $.ajax({
+                url: `/horoscopes/${horoscopeId}/toggle-active`,
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}', // CSRF-токен
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Обновление текста статуса
+                        checkbox.closest('td').find('.active-status').text(response.active ? 'Yes' : 'No');
+                    } else {
+                        alert('Ошибка при обновлении статуса.');
+                    }
+                },
+                error: function () {
+                    alert('Ошибка при отправке запроса.');
+                    checkbox.prop('checked', !isActive); // Возвращаем чекбокс в исходное состояние
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>

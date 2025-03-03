@@ -20,10 +20,6 @@
             <label for="text_en" class="form-label">Text EN</label>
             <textarea class="form-control" id="text_en" name="text_en" rows="3" required>{{ $horoscope->text_en }}</textarea>
         </div>
-        <div class="mb-3">
-            <label for="using" class="form-label">Using</label>
-            <input type="number" class="form-control" id="using" name="using" value="{{ $horoscope->using }}">
-        </div>
         <div class="mb-3 form-check">
             <input type="checkbox" class="form-check-input" id="active" name="active" value="1" {{ $horoscope->active ? 'checked' : '' }}>
             <label class="form-check-label" for="active">Active</label>
