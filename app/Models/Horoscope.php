@@ -28,5 +28,10 @@ class Horoscope  extends Model implements HoroscopeInterface
         'text_en',
         'active',
     ];
+
+    public function shows()
+    {
+        return $this->hasMany(Show::class, 'horoscopes_id');
+    }
 }
 

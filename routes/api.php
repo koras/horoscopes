@@ -45,3 +45,5 @@ Route::get('/', function () {
 
 Route::get('compatibility', [App\Http\Controllers\HoroscopeController::class, 'compatibility']);
 Route::get('horoscope', [App\Http\Controllers\HoroscopeController::class, 'horoscope']);
+
+Route::get('horoscope/info', [App\Http\Controllers\HoroscopeController::class, 'info']);

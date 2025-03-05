@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Services\MarkerServiceInterface;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Horoscope;
-
+use Illuminate\Support\Facades\Cache;
 use App\Contracts\Services\HoroscopeServiceInterface;
 
 class HoroscopeController extends Controller
@@ -34,8 +35,8 @@ class HoroscopeController extends Controller
         "interests",
         "work",
         "energy",
-      //  "family",
-      //  "loyalty",
+        //  "family",
+        //  "loyalty",
     ];
 
 
@@ -52,10 +53,30 @@ class HoroscopeController extends Controller
         return $result;
     }
 
-
-    public function horoscope(HoroscopeServiceInterface $service)
+    /**
+     * @return string[]
+     */
+    public function info(HoroscopeServiceInterface $service)
     {
-        return $service->getCurrent();
+        // Кэширование данных на 1 час (3600 секунд)
+        return Cache::remember('key', 3600, function () use ($service) {
+            return $service->getInfo();
+        });
+    }
+
+
+    public function horoscope(Request $request, HoroscopeServiceInterface $service)
+    {
+        $res = [];
+        $res[] = $service->getCurrent();
+        $res[] = $service->fillWeeklyShowTable();
+        //       $type = $request->input('type',1);
+//        if($type == 1){
+//            $service->getCurrent();
+//        }else {
+//            $service->fillWeeklyShowTable();
+//        }
+        return $res;
     }
 
     public function store(Request $request)
@@ -91,7 +112,7 @@ class HoroscopeController extends Controller
 
     public function index()
     {
-        $horoscopes = Horoscope::orderBy("id","desc")->paginate(10); // Пагинация по 10 записей на страницу
+        $horoscopes = Horoscope::orderBy("id", "desc")->paginate(10); // Пагинация по 10 записей на страницу
         return view('horoscope.index', compact('horoscopes'));
     }
 
