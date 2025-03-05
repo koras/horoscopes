@@ -35,8 +35,6 @@ class HoroscopeController extends Controller
         "interests",
         "work",
         "energy",
-        //  "family",
-        //  "loyalty",
     ];
 
 
@@ -70,12 +68,6 @@ class HoroscopeController extends Controller
         $res = [];
         $res[] = $service->getCurrent();
         $res[] = $service->fillWeeklyShowTable();
-        //       $type = $request->input('type',1);
-//        if($type == 1){
-//            $service->getCurrent();
-//        }else {
-//            $service->fillWeeklyShowTable();
-//        }
         return $res;
     }
 

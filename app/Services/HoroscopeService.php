@@ -26,6 +26,15 @@ class HoroscopeService implements HoroscopeServiceInterface
         'virgo',
     ];
 
+    private $compatibilityItem = [
+        "love",
+        "money",
+        "travel",
+        "interests",
+        "work",
+        "energy",
+    ];
+
     private function getSodiac($id)
     {
         return self::SODIAC[($id - 1)];
