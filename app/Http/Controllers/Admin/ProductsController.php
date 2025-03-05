@@ -6,9 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Services\Products\ProductsPrepare;
 use Illuminate\Http\Request;
 use App\Services\Products;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\ProductsExcelRequest;
 use App\Services\Products\UploadExcel;
 use Maatwebsite\Excel\Facades\Excel;
+
+
+use App\Models\ProductFileShops;
+
 
 class ProductsController extends Controller
 {
@@ -20,14 +25,39 @@ class ProductsController extends Controller
      */
     public function preparationExcel(ProductsExcelRequest $request)
     {
+        // "application/vnd.ms-excel"
+        $service = new ProductsPrepare();
+        $file = $request->file('file');
 
-        $firstRow = Excel::import(new ProductsPrepare, $request->file('file'));
-     //   $model =
+        Excel::import($service, $file);
 
-  //      Excel::import(new ProductsPrepare, $file);
-      // $data = (new UploadExcel())->parserExcel($request->file('file'));
-         dd($firstRow );
+
+
+        $hashedName = $file->hashName();
+
+        $path = $file->storeAs('uploads', $hashedName, 'public');
+        // Сохраняем информацию о файле в базу данных
+        $fileRecord = new ProductFileShops();
+        $fileRecord->name = $file->getClientOriginalName(); // Оригинальное имя файла
+        $fileRecord->path = $path; // Путь к файлу
+        $fileRecord->hash_name = $hashedName; // Хэшированное имя файла
+        $fileRecord->save();
+        $result = $service->firstFiveRows;
+
+        $result["file"] = [
+            "id" => $fileRecord->id,
+            "name" => $file->getClientOriginalName(),
+        ];
+
+        return $result;
     }
+
+    public function uploadExcel(ProductsExcelRequest $request, UploadExcel $service)
+    {
+      return  $service->parserExcel($request);
+
+    }
+
 
     /**
      * Сохраняем эксель

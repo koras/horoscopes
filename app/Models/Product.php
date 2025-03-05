@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Contracts\Models\ProductInterface;
 
-class Product extends Model
+class Product extends Model implements ProductInterface
 {
 
     use HasFactory;
+
+    protected $primaryKey = 'product_id';
+    public $incrementing = true;
 
     // Указываем имя таблицы
     protected $table = 'products';
@@ -16,15 +20,9 @@ class Product extends Model
     // Поля, которые могут быть заполнены
     protected $fillable = [
         'name',
-        'description',
         'price',
         'quantity',
-        'discount',
-        'color',
-        'size',
-        'weight',
-        'seller_id',
-        'supplier_id',
+        'shop_id',
     ];
     // Связь с моделью Seller
     public function seller()
@@ -41,6 +39,6 @@ class Product extends Model
     // Связь с моделью ProductAttributes (один к одному)
     public function attributes()
     {
-        return $this->hasOne(ProductAttribute::class, 'product_id');
+        return $this->hasOne(ProductAttributes::class, 'product_id');
     }
 }
