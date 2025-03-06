@@ -62,28 +62,16 @@ class HoroscopeService implements HoroscopeServiceInterface
     public function getInfo()
     {
         // Получаем гороскопы за текущий день
-        $dailyHoroscopes = $this->getDailyHoroscopes(0);
+        for ($day = 0;$day < 7;$day++){
+            $dailyHoroscopes = $this->getDailyHoroscopes($day);
+            foreach ($dailyHoroscopes as $horoscope) {
+                $formattedDate = Carbon::createFromFormat('Y-m-d', $horoscope->date)->format('d.m');
+                $result['daily'][$formattedDate][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
+            }
 
-        foreach ($dailyHoroscopes as $horoscope) {
-            $result['daily'][$horoscope->date][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
-        }
-
-        $dailyHoroscopes = $this->getDailyHoroscopes(1);
-        foreach ($dailyHoroscopes as $horoscope) {
-            $result['daily'][$horoscope->date][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
-        }
-        $dailyHoroscopes = $this->getDailyHoroscopes(2);
-        foreach ($dailyHoroscopes as $horoscope) {
-            $result['daily'][$horoscope->date][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
-        }
-
-        $dailyHoroscopes = $this->getDailyHoroscopes(3);
-        foreach ($dailyHoroscopes as $horoscope) {
-            $result['daily'][$horoscope->date][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
         }
 
         $weeklyHoroscopes = $this->getWeeklyHoroscopes();
-        // dd($weeklyHoroscopes);
         foreach ($weeklyHoroscopes as $horoscope) {
             $result['weekly'][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
         }

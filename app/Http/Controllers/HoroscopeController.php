@@ -57,7 +57,7 @@ class HoroscopeController extends Controller
     public function info(HoroscopeServiceInterface $service)
     {
         // Кэширование данных на 1 час (3600 секунд)
-        return Cache::remember('key', 3600, function () use ($service) {
+        return Cache::remember('key', 60, function () use ($service) {
             return $service->getInfo();
         });
     }
