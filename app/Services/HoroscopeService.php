@@ -62,7 +62,7 @@ class HoroscopeService implements HoroscopeServiceInterface
     public function getInfo()
     {
         // Получаем гороскопы за текущий день
-        for ($day = 0;$day < 2;$day++){
+        for ($day = 0;$day < 4;$day++){
             $dailyHoroscopes = $this->getDailyHoroscopes($day);
             foreach ($dailyHoroscopes as $horoscope) {
                 $formattedDate = Carbon::createFromFormat('Y-m-d', $horoscope->date)->format('d.m');
