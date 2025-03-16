@@ -62,7 +62,7 @@ class HoroscopeService implements HoroscopeServiceInterface
     public function getInfo()
     {
         // Получаем гороскопы за текущий день
-        for ($day = 0;$day < 7;$day++){
+        for ($day = 0;$day < 2;$day++){
             $dailyHoroscopes = $this->getDailyHoroscopes($day);
             foreach ($dailyHoroscopes as $horoscope) {
                 $formattedDate = Carbon::createFromFormat('Y-m-d', $horoscope->date)->format('d.m');
@@ -71,10 +71,10 @@ class HoroscopeService implements HoroscopeServiceInterface
 
         }
 
-        $weeklyHoroscopes = $this->getWeeklyHoroscopes();
-        foreach ($weeklyHoroscopes as $horoscope) {
-            $result['weekly'][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
-        }
+//        $weeklyHoroscopes = $this->getWeeklyHoroscopes();
+//        foreach ($weeklyHoroscopes as $horoscope) {
+//            $result['weekly'][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
+//        }
 
         return $result;
     }

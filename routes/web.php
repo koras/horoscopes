@@ -7,6 +7,11 @@ Route::get('/', function () {
     return  ;
 });
 
+
+
+//генерируем гороскоп
+// https://horoscope.staers.ru/api/horoscope
+
 // Маршрут для обновления поля active через AJAX
 Route::post('/horoscopes/{id}/toggle-active', [HoroscopeController::class, 'toggleActive'])->name('horoscopes.toggle-active');
 
@@ -15,6 +20,11 @@ Route::post('horoscope/store', [HoroscopeController::class, 'store'])->name('hor
 Route::get('horoscope/store', [HoroscopeController::class, 'view'])->name('horoscopes.store');
 // Маршрут для отображения формы редактирования
 Route::get('/horoscopes/{id}/edit', [HoroscopeController::class, 'edit'])->name('horoscopes.edit');
+
+
+
+// генерируем гороскоп
+Route::get('horoscope/generation', [App\Http\Controllers\HoroscopeController::class, 'horoscope']);
 
 
 Route::get('horoscope', [HoroscopeController::class, 'index'])->name('horoscopes.index');

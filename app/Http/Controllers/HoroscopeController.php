@@ -67,7 +67,7 @@ class HoroscopeController extends Controller
     {
         $res = [];
         $res[] = $service->getCurrent();
-        $res[] = $service->fillWeeklyShowTable();
+      //  $res[] = $service->fillWeeklyShowTable();
         return $res;
     }
 
