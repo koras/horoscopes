@@ -72,11 +72,6 @@ class HoroscopeService implements HoroscopeServiceInterface
 
         }
 
-//        $weeklyHoroscopes = $this->getWeeklyHoroscopes();
-//        foreach ($weeklyHoroscopes as $horoscope) {
-//            $result['weekly'][self::getSodiac($horoscope->zodiac)] = $this->resourse($horoscope);
-//        }
-
         return $result;
     }
 
@@ -137,14 +132,8 @@ class HoroscopeService implements HoroscopeServiceInterface
         // Получаем 12 записей
         $dailyHoroscopesCollection = $dailyHoroscopes->limit(12)->get();
 
-
-
-
         // Записи для гороскопа
         // Если записей недостаточно, выходим
-
-
-
         if ($dailyHoroscopesCollection->count() <= 12) {
           //  dd(5465, $lastDate, $targetDate,$existingRecords,$dailyHoroscopes->count(),$dailyHoroscopesCollection->count());
             // Удаляем только если коллекция не пустая
@@ -154,10 +143,7 @@ class HoroscopeService implements HoroscopeServiceInterface
                 //    dd(57765, $lastDate, $targetDate,$existingRecords,$dailyHoroscopes->count());
             } else {
                 $dailyHoroscopes = Horoscope::where('active', '1')->inRandomOrder()->limit(12)->get();
-             //   dd(123123);
             }
-
-            //   return;
         }else{
             $dailyHoroscopes = Horoscope::where('active', '1')->inRandomOrder()->limit(12)->get();
         }
