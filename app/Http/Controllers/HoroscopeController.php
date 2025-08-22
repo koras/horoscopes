@@ -58,7 +58,15 @@ class HoroscopeController extends Controller
     {
         // Кэширование данных на 1 час (3600 секунд)
         return Cache::remember('key', 60, function () use ($service) {
-            return $service->getInfo();
+            $result =  $service->getInfo();
+            if(count($result) == 0){
+                $service->getCurrent();
+                $service->getCurrent();
+                $service->getCurrent();
+                $service->getCurrent();
+                $service->getCurrent();
+            }
+            return $result;
         });
     }
 
@@ -67,7 +75,6 @@ class HoroscopeController extends Controller
     {
         $res = [];
         $res[] = $service->getCurrent();
-      //  $res[] = $service->fillWeeklyShowTable();
         return $res;
     }
 
