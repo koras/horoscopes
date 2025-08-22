@@ -61,8 +61,9 @@ class HoroscopeService implements HoroscopeServiceInterface
 
     public function getInfo()
     {
+        $result = [];
         // Получаем гороскопы за текущий день
-        for ($day = 0;$day < 4;$day++){
+        for ($day = 0; $day < 4; $day++) {
             $dailyHoroscopes = $this->getDailyHoroscopes($day);
             foreach ($dailyHoroscopes as $horoscope) {
                 $formattedDate = Carbon::createFromFormat('Y-m-d', $horoscope->date)->format('d.m');
@@ -121,28 +122,52 @@ class HoroscopeService implements HoroscopeServiceInterface
         $existingRecords = Show::where('date', $targetDate)->where('type', 'daily')->count();
         if ($existingRecords >= 12) {
             return; // Если записи уже есть, ничего не делаем
+        } elseif ($existingRecords < 12 || $existingRecords == 0) {
+            // записей меньше чем необходимо, надо удалить все записи за это число
+            Show::where('date', $targetDate)->where('type', 'daily')->delete();
         }
-
         //dd( $lastDate);
+        // Получаем дневные гороскопы, которые не использовались в течение недели
         // Получаем дневные гороскопы, которые не использовались в течение недели
         $dailyHoroscopes = Horoscope::whereDoesntHave('shows', function ($query) {
             $query->where('created_at', '>=', Carbon::now()->subWeek());
         })
-            ->inRandomOrder()
-            ->limit(12)
-            ->get();
+            ->inRandomOrder();
 
+        // Получаем 12 записей
+        $dailyHoroscopesCollection = $dailyHoroscopes->limit(12)->get();
+
+
+
+
+        // Записи для гороскопа
         // Если записей недостаточно, выходим
-        if ($dailyHoroscopes->count() < 12) {
-            return;
+
+
+
+        if ($dailyHoroscopesCollection->count() <= 12) {
+          //  dd(5465, $lastDate, $targetDate,$existingRecords,$dailyHoroscopes->count(),$dailyHoroscopesCollection->count());
+            // Удаляем только если коллекция не пустая
+            if ($dailyHoroscopesCollection->isNotEmpty()) {
+                // Правильное удаление через модель
+                Horoscope::whereIn('id', $dailyHoroscopesCollection->pluck('id'))->delete();
+                //    dd(57765, $lastDate, $targetDate,$existingRecords,$dailyHoroscopes->count());
+            } else {
+                $dailyHoroscopes = Horoscope::where('active', '1')->inRandomOrder()->limit(12)->get();
+             //   dd(123123);
+            }
+
+            //   return;
+        }else{
+            $dailyHoroscopes = Horoscope::where('active', '1')->inRandomOrder()->limit(12)->get();
         }
-        $tmp = [];
+        $tmp = ['targetDate' => $targetDate, 'lastDate' => $lastDate, 'data' => []];
         // Добавляем записи в таблицу show
         foreach ($dailyHoroscopes as $index => $horoscope) {
             // Генерируем 5 случайных чисел в порядке возрастания
             $favoriteNumbers = collect(range(1, 100))->random(5)->sort()->values();
 
-            $tmp[] = Show::create([
+            $data = [
                 'type' => 'daily', // Тип гороскопа
                 'horoscopes_id' => $horoscope->id,
                 'zodiac' => $index + 1, // Знаки зодиака от 1 до 12
@@ -151,10 +176,17 @@ class HoroscopeService implements HoroscopeServiceInterface
                 'chart_love' => rand(1, 100),
                 'chart_money' => rand(1, 100),
                 'chart_like' => rand(1, 100),
-            ]);
+            ];
+
+
+            Show::create($data);
+            $tmp['data'][] = $data;
         }
         return $tmp;
     }
+
+
+
 
     public function fillWeeklyShowTable()
     {
