@@ -17,3 +17,4 @@ Route::get('compatibility', [App\Http\Controllers\HoroscopeController::class, 'c
 Route::get('horoscope', [App\Http\Controllers\HoroscopeController::class, 'horoscope']);
 
 Route::get('horoscope/info', [App\Http\Controllers\HoroscopeController::class, 'info']);
+Route::get('check-horoscopes', [HoroscopeController::class, 'checkHoroscopes']);
